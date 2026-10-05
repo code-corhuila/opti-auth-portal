@@ -40,6 +40,11 @@ describe('form validation', () => {
     expect(validateNewUser({ username: 'Laura.Ortega', fullName: 'Laura Ortega', password: 'Correct-Horse-42', role: 'SELLER' })).toEqual({});
   });
 
+  it('rejects numbers and special characters in the full name', () => {
+    const errors = validateNewUser({ username: 'laura.ortega', fullName: 'Laura2', password: 'Correct-Horse-42', role: 'SELLER' });
+    expect(errors.fullName).toBeDefined();
+  });
+
   it('a password change needs the current one, a new different one and a matching confirmation', () => {
     const errors = validatePasswordChange({ currentPassword: '', newPassword: 'weak', confirmation: 'other' }, 'laura');
     expect(Object.keys(errors).sort()).toEqual(['confirmation', 'currentPassword', 'newPassword']);

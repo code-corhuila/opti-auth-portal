@@ -7,6 +7,8 @@ import type { UserRole } from './user';
 export type Errors = Record<string, string>;
 
 const USERNAME = /^[a-z0-9._-]{3,40}$/;
+/** Letters (including accents and Ñ) and spaces only: no digits, no punctuation. */
+const FULL_NAME = /^[\p{L} ]+$/u;
 const MIN_PASSWORD = 10;
 const MAX_PASSWORD_BYTES = 72;
 
@@ -51,8 +53,8 @@ export function validateNewUser(draft: NewUserDraft): Errors {
     errors.username = 'De 3 a 40 caracteres: letras, números, punto, guion o guion bajo';
   }
   const name = draft.fullName.trim();
-  if (name.length < 2 || name.length > 120) {
-    errors.fullName = 'El nombre completo es obligatorio (2 a 120 caracteres)';
+  if (name.length < 2 || name.length > 120 || !FULL_NAME.test(name)) {
+    errors.fullName = 'Solo letras, sin números ni caracteres especiales (2 a 120)';
   }
   const problem = passwordProblem(draft.password, draft.username);
   if (problem) {
