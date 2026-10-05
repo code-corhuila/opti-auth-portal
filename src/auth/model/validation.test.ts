@@ -32,17 +32,23 @@ describe('form validation', () => {
   });
 
   it('a new user names every invalid field at once', () => {
-    const errors = validateNewUser({ username: 'A!', fullName: ' ', password: 'short', role: '' });
+    const errors = validateNewUser({ username: 'A!', fullName: ' ', email: '', password: 'short', role: '' });
     expect(Object.keys(errors).sort()).toEqual(['fullName', 'password', 'role', 'username']);
   });
 
   it('a valid new user passes; the username is compared in lower case', () => {
-    expect(validateNewUser({ username: 'Laura.Ortega', fullName: 'Laura Ortega', password: 'Correct-Horse-42', role: 'SELLER' })).toEqual({});
+    expect(validateNewUser({ username: 'Laura.Ortega', fullName: 'Laura Ortega', email: '', password: 'Correct-Horse-42', role: 'SELLER' })).toEqual({});
   });
 
   it('rejects numbers and special characters in the full name', () => {
-    const errors = validateNewUser({ username: 'laura.ortega', fullName: 'Laura2', password: 'Correct-Horse-42', role: 'SELLER' });
+    const errors = validateNewUser({ username: 'laura.ortega', fullName: 'Laura2', email: '', password: 'Correct-Horse-42', role: 'SELLER' });
     expect(errors.fullName).toBeDefined();
+  });
+
+  it('an email is optional, but must look like one when given', () => {
+    const valid = { username: 'laura.ortega', fullName: 'Laura Ortega', password: 'Correct-Horse-42', role: 'SELLER' as const };
+    expect(validateNewUser({ ...valid, email: 'laura@optiview.com' }).email).toBeUndefined();
+    expect(validateNewUser({ ...valid, email: 'not-an-email' }).email).toBeDefined();
   });
 
   it('a password change needs the current one, a new different one and a matching confirmation', () => {

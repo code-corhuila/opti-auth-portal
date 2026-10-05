@@ -4,7 +4,7 @@ import { authApi, type NewUser } from '../api/authApi';
 import { ROLES, type UserRole } from '../model/user';
 import { validateNewUser, type NewUserDraft } from '../model/validation';
 
-const EMPTY: NewUserDraft = { username: '', fullName: '', password: '', role: '' };
+const EMPTY: NewUserDraft = { username: '', fullName: '', email: '', password: '', role: '' };
 
 export function NewUserForm({ shell, onCreated, onCancel }: {
   shell: ShellContext;
@@ -19,6 +19,7 @@ export function NewUserForm({ shell, onCreated, onCancel }: {
   const request: NewUser = {
     username: draft.username.trim().toLowerCase(),
     fullName: draft.fullName.trim(),
+    email: draft.email.trim() || null,
     password: draft.password,
     role: draft.role as UserRole,
   };
@@ -49,6 +50,9 @@ export function NewUserForm({ shell, onCreated, onCancel }: {
         <ui.TextField id="new-fullName" label="Nombre completo" required value={draft.fullName}
           onChange={(v) => setDraft((d) => ({ ...d, fullName: v }))} error={errors.fullName} maxLength={120}
           hint="Solo letras" />
+        <ui.TextField id="new-email" label="Correo electrónico" type="email" value={draft.email}
+          onChange={(v) => setDraft((d) => ({ ...d, email: v }))} error={errors.email} maxLength={160}
+          autoComplete="off" />
         <ui.TextField id="new-password" label="Contraseña temporal" required type="password" value={draft.password}
           onChange={(v) => setDraft((d) => ({ ...d, password: v }))} error={errors.password}
           hint="Al menos 10 caracteres, con mayúsculas, minúsculas y números" autoComplete="new-password" />
