@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import type { ShellContext } from '../../shell-contract';
 import { authApi } from '../api/authApi';
 import { NewUserForm } from '../components/NewUserForm';
-import { formatDate, initials, ROLE_LABEL, ROLES } from '../model/user';
+import { formatDate, ROLE_LABEL, ROLES } from '../model/user';
 
 /** Administers people (create, deactivate, reactivate). Only for ADMIN. */
 export function UsersPage({ shell }: { shell: ShellContext }): ReactNode {
@@ -78,9 +78,7 @@ export function UsersPage({ shell }: { shell: ShellContext }): ReactNode {
                     <tr key={user.id}>
                       <td>
                         <span className="user-cell">
-                          {/* TODO: switch to ui.Avatar (shared SharedUi.Avatar contract) once it lands in
-                              shell-contract.ts from opti-front; this inline circle is a temporary fallback. */}
-                          <span className="avatar-fallback" aria-hidden="true">{initials(user.fullName)}</span>
+                          <ui.Avatar name={user.fullName} />
                           {user.username}
                         </span>
                       </td>

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
 import type { LoadState, ShellContext } from '../../shell-contract';
 import { authApi } from '../api/authApi';
-import { initials, ROLE_LABEL, type User } from '../model/user';
+import { ROLE_LABEL, type User } from '../model/user';
 import { validatePasswordChange, type PasswordChangeDraft } from '../model/validation';
 
 const EMPTY: PasswordChangeDraft = { currentPassword: '', newPassword: '', confirmation: '' };
@@ -51,11 +51,7 @@ function ProfileTab({ state, onRetry, ui }: {
         return (
           <section className="card">
             <div className="profile-header">
-              {/* TODO: switch to ui.Avatar (shared SharedUi.Avatar contract) once it lands in
-                  shell-contract.ts from opti-front; this inline circle is a temporary fallback. */}
-              <span className="avatar-fallback avatar-fallback-lg" aria-hidden="true">
-                {initials(person.fullName)}
-              </span>
+              <ui.Avatar name={person.fullName} />
               <h2>{person.fullName}</h2>
             </div>
             <dl className="facts">

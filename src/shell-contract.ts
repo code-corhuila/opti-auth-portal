@@ -129,6 +129,8 @@ export interface SharedUi {
   Pager: (props: { meta: PageMeta; onPage: (page: number) => void }) => ReactNode;
   Banner: (props: { kind: 'error' | 'info' | 'success'; title?: string; children: ReactNode }) => ReactNode;
   Badge: (props: { tone: 'neutral' | 'info' | 'success' | 'warning' | 'danger'; children: ReactNode }) => ReactNode;
+  /** A colored circle with a person's initials; the color is picked deterministically from the name. */
+  Avatar: (props: { name: string }) => ReactNode;
   /** Loads data; a newer request replaces the previous one so a slow answer never overwrites a fast one. */
   useLoad: <T>(loader: (signal: AbortSignal) => Promise<T>, deps: readonly unknown[]) => {
     state: LoadState<T>;
