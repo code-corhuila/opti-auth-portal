@@ -6,6 +6,7 @@ export interface User {
   id: string;
   username: string;
   fullName: string;
+  email: string | null;
   role: UserRole;
   active: boolean;
   createdAt: string;
@@ -34,4 +35,15 @@ export const ROLE_LABEL: Record<UserRole, string> = {
 export function formatDate(iso: string): string {
   const [year, month, day] = iso.slice(0, 10).split('-');
   return `${day}/${month}/${year}`;
+}
+
+/**
+ * Up to two initials from a full name, for the avatar fallback (see the TODO in UsersPage/AccountPage:
+ * switch to the shared `ui.Avatar` once `SharedUi.Avatar` lands in shell-contract.ts).
+ */
+export function initials(fullName: string): string {
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+  const first = parts[0]?.[0] ?? '';
+  const last = parts.length > 1 ? parts[parts.length - 1]?.[0] ?? '' : '';
+  return (first + last).toUpperCase();
 }

@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import type { ShellContext } from '../../shell-contract';
 import { authApi } from '../api/authApi';
 import { NewUserForm } from '../components/NewUserForm';
-import { formatDate, ROLE_LABEL, ROLES } from '../model/user';
+import { formatDate, initials, ROLE_LABEL, ROLES } from '../model/user';
 
 /** Administers people (create, deactivate, reactivate). Only for ADMIN. */
 export function UsersPage({ shell }: { shell: ShellContext }): ReactNode {
@@ -66,6 +66,7 @@ export function UsersPage({ shell }: { shell: ShellContext }): ReactNode {
                   <tr>
                     <th>Usuario</th>
                     <th>Nombre</th>
+                    <th>Email</th>
                     <th>Rol</th>
                     <th>Creado</th>
                     <th>Estado</th>
@@ -75,8 +76,16 @@ export function UsersPage({ shell }: { shell: ShellContext }): ReactNode {
                 <tbody>
                   {result.data.map((user) => (
                     <tr key={user.id}>
-                      <td>{user.username}</td>
+                      <td>
+                        <span className="user-cell">
+                          {/* TODO: switch to ui.Avatar (shared SharedUi.Avatar contract) once it lands in
+                              shell-contract.ts from opti-front; this inline circle is a temporary fallback. */}
+                          <span className="avatar-fallback" aria-hidden="true">{initials(user.fullName)}</span>
+                          {user.username}
+                        </span>
+                      </td>
                       <td>{user.fullName}</td>
+                      <td>{user.email ?? '—'}</td>
                       <td>{ROLE_LABEL[user.role]}</td>
                       <td>{formatDate(user.createdAt)}</td>
                       <td>

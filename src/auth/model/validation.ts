@@ -9,6 +9,8 @@ export type Errors = Record<string, string>;
 const USERNAME = /^[a-z0-9._-]{3,40}$/;
 /** Letters (including accents and Ñ) and spaces only: no digits, no punctuation. */
 const FULL_NAME = /^[\p{L} ]+$/u;
+/** Same pattern mirrored across the portals (see customers-portal's validation.ts). */
+const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
 const MIN_PASSWORD = 10;
 const MAX_PASSWORD_BYTES = 72;
 
@@ -43,6 +45,7 @@ export function validateLogin(draft: { username: string; password: string }): Er
 export interface NewUserDraft {
   username: string;
   fullName: string;
+  email: string;
   password: string;
   role: UserRole | '';
 }
@@ -55,6 +58,10 @@ export function validateNewUser(draft: NewUserDraft): Errors {
   const name = draft.fullName.trim();
   if (name.length < 2 || name.length > 120 || !FULL_NAME.test(name)) {
     errors.fullName = 'Solo letras, sin números ni caracteres especiales (2 a 120)';
+  }
+  const email = draft.email.trim();
+  if (email && (email.length > 160 || !EMAIL.test(email))) {
+    errors.email = 'Escribe un correo válido';
   }
   const problem = passwordProblem(draft.password, draft.username);
   if (problem) {
