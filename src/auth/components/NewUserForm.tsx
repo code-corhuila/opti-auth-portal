@@ -47,7 +47,8 @@ export function NewUserForm({ shell, onCreated, onCancel }: {
           onChange={(v) => setDraft((d) => ({ ...d, username: v }))} error={errors.username} maxLength={40}
           hint="Letras, números, punto, guion o guion bajo" autoComplete="off" />
         <ui.TextField id="new-fullName" label="Nombre completo" required value={draft.fullName}
-          onChange={(v) => setDraft((d) => ({ ...d, fullName: v }))} error={errors.fullName} maxLength={120} />
+          onChange={(v) => setDraft((d) => ({ ...d, fullName: v }))} error={errors.fullName} maxLength={120}
+          hint="Solo letras" />
         <ui.TextField id="new-password" label="Contraseña temporal" required type="password" value={draft.password}
           onChange={(v) => setDraft((d) => ({ ...d, password: v }))} error={errors.password}
           hint="Al menos 10 caracteres, con mayúsculas, minúsculas y números" autoComplete="new-password" />
