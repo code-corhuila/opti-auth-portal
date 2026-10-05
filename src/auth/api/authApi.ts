@@ -12,6 +12,7 @@ export interface UserQuery {
 export interface NewUser {
   username: string;
   fullName: string;
+  email: string | null;
   password: string;
   role: UserRole;
 }
