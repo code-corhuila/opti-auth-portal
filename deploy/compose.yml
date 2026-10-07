@@ -1,0 +1,18 @@
+# The auth interface as a remote of the container. No published port: opti-front proxies /remotes/auth/.
+name: opti-auth-portal
+
+services:
+  auth-portal:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: opti/auth-portal:local
+    networks:
+      - platform
+    expose:
+      - "80"
+    restart: unless-stopped
+
+networks:
+  platform:
+    external: true
