@@ -23,7 +23,7 @@ export function AccountPage({ shell }: { shell: ShellContext }): ReactNode {
 
   return (
     <>
-      <ui.PageHeader title="Mi cuenta" />
+      <ui.PageHeader title="Mi cuenta" subtitle="Administra tu información personal, seguridad y preferencias." />
       <div className="tabs" role="tablist" aria-label="Mi cuenta">
         {TABS.map((t) => (
           <button key={t.id} type="button" role="tab" aria-selected={tab === t.id}
@@ -52,17 +52,18 @@ function ProfileTab({ state, onRetry, ui }: {
           <section className="card">
             <div className="profile-header">
               <ui.Avatar name={person.fullName} />
-              <h2>{person.fullName}</h2>
+              <div><h2>{person.fullName}</h2><ui.Badge tone="info">{role}</ui.Badge></div>
             </div>
-            <dl className="facts">
-              <dt>Usuario</dt>
-              <dd>{person.username}</dd>
-              <dt>Nombre</dt>
-              <dd>{person.fullName}</dd>
-              <dt>Email</dt>
-              <dd>{person.email ?? '—'}</dd>
-              <dt>Rol</dt>
-              <dd>{role}</dd>
+            <dl className="account-facts">
+              {[
+                { label: 'Nombre de usuario', hint: 'Identificador para iniciar sesión.', value: person.username, icon: <><circle cx="10" cy="6" r="3" /><path d="M4 17c0-7 12-7 12 0" /></> },
+                { label: 'Nombre completo', hint: 'Tu nombre en el sistema.', value: person.fullName, icon: <><rect x="3" y="4" width="14" height="12" rx="2" /><path d="M6 8h8M6 12h5" /></> },
+                { label: 'Correo electrónico', hint: 'Dirección de contacto de tu cuenta.', value: person.email ?? '—', icon: <><rect x="2" y="4" width="16" height="12" rx="2" /><path d="m2 5 8 6 8-6" /></> },
+                { label: 'Rol', hint: 'Nivel de permisos en el sistema.', value: role, icon: <><path d="m10 2 7 3v5c0 4-7 8-7 8s-7-4-7-8V5l7-3Z" /><path d="m6 10 3 3 5-6" /></> },
+              ].map((row) => <div className="account-fact" key={row.label}>
+                <dt><svg className="account-fact-icon" width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">{row.icon}</svg>
+                  <span>{row.label}<small>{row.hint}</small></span></dt><dd>{row.value}</dd>
+              </div>)}
             </dl>
           </section>
         );
@@ -110,7 +111,8 @@ function SecurityTab({ shell }: { shell: ShellContext }): ReactNode {
 
   return (
     <section className="card">
-      <h2>Cambiar contraseña</h2>
+      <ui.SectionHeading tone="primary" title="Cambiar contraseña" description="Mantén tu cuenta segura con una contraseña robusta."
+        icon={<><rect x="4" y="8" width="12" height="9" rx="2" /><path d="M6 8V6a4 4 0 0 1 8 0v2M10 12v2" /></>} />
       <form onSubmit={(event) => void onSubmit(event)} noValidate>
         {failure && Object.keys(serverErrors).length === 0 ? <ui.Banner kind="error">{failure}</ui.Banner> : null}
         <ui.TextField id="currentPassword" label="Contraseña actual" required type="password"
